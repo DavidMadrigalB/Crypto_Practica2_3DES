@@ -1,0 +1,873 @@
+Capas:
+4-Transporte: Se encarga de corregir errores
+2-Enlace de datos: Protocolo PP, usa direcciones MAC; prepara los datos de red para la red física
+	Subcapa LLC: Trabaja con la parte lógica (software), se comunica con la capa de Red para entender su lenguaje, leer el paquete, checar direccionamiento y lo encapsula (encapsulamiento)
+	Subcapa MAC: Subcapa de Control de Acceso la Medio, no MACAddress; contempla el protocolo PP e ISDN. 
+1.Física:
+https://www.itesa.edu.mx/netacad/introduccion/course/module3/index.html#3.2.4.2
+
+Para evitar "colisiones" o choques entre tramas, se usan ciertas reglas en el medio
+	Escuchar a la portadora, si alguien está transmitiendo, sino, el otro dispositivo puede empezar a transmitir
+	
+Dominio de colisión: tramas en el medio cuando envia de un disp. a otro en un solo hub (estaciones), redes compartidas
+	Switch: (Cada puerto se convierte en un dominio de colisión)
+	El Switch ya tiene la información para dirigir al equipo de uno a uno (MAC?)
+
+Dominio de Broadcast: Los routers
+
+HUB: Limitado en puertos fisicos comparado con Switch
+Hace el broadcast, recibe y envia a todos (sin filtro)
+Divide ancho de banda por el número de estaciones, cada puerto se convierte en dominio de colisión
+
+Acceso al medio:
+¿Topología multiAcceso?
+	Acceso por contienda (Control de Acceso al medio): Un método en el cual primero escucha al medio y tendría que estar esperando/escuchando si el medio está ocupado, y en determinado tiempo lo vuelve a escuchar, cuando no escucha nada le toca su turno para poder transmitir
+		Características:
+		Colisiones entre tramas
+			(Los dispositivos pueden transmitir de vez en cuando o cuando quieren?)
+			Una colisión cancela las tramas, después de una colisión se activa un temporizador de espera (mecanismos para resolver la contienda por los medios)
+			Alambrica: Detecta colisiones
+			Inalambrica: Evita las colisiones
+			CSMA/CD Detección de colisiones - Cables (LAN)
+	Acceso controlado
+		Trabaja a través de tokens, por turnos, para poder transmitir o no según su turno hasta que termine su tiempo de transmisión, sin colisiones
+			CDMA/CA Prevenir colisiones - Redes inalámbricas
+
+Ethernet II es el formato de trama de Ethernet utilizado en redes TCP/IP
+IEEE 802.3
+	tramas (datos): 64 bytes a 1518 bytes
+Secuencia de verificación de trama utilizando el CRC SCR
+FCS involucra: Dirección de destino y origen, longitud/tipo, encabezado y datos 802.2
+	hace uso de un algoritmo matemático
+
+Tamaño de trama Ethernet 65 bytes mínima, y 1518 bytes máxima
+
+Direcciones Físicas (MAC): Identidad de Ethernet
+La dirección física o MAC sirve como identificador de un dispositivo
+-Está en capa2, es una valor binario de 48 bits expresado como 12 dígitos hexadecimales
+primeros 24 bits (3 bytes): OUI (Identificador único de organización) -DELL,INTEL,AMD (dispositivos)
+últimos 24 bits: Asignado por el proveedor (NIC, interfaces) 
+
+Ethernet unicast, multicast y broadcast
+Broadcast: De uno a muchos				Switch
+Unicast: Comunicación de uno a uno (origen - destino (interesado))
+Multicast: Eventos de respaldos, un origen a un grupo que pertenece a ese Multicast (determinado para cierto grupo - destino)
+	Ejemplo: Videojuegos en linea, streaming, videollamadas (webex), 
+	
+Entorno fragil: Redes por satelite de transmisión ya que no están guiados
+
+Topología es la forma en la cuál está armado (la red)
+	Topología física: ¿Cómo está armada/diseñada fisicamente mi infraestructura de red?
+		¿Donde tendre alejado toda la granja de servidores?
+		¿Por donde entrara el proveedor de servicio?
+		¿Dónde están ubicados los dispositivos?
+	Topología lógica: Diagrama lógico; es representar los dispositivos (Servidores, computadoras) con sus respectivas direcciones IP (direccionamiento lógico), también el router
+
+Topologías físicas de WAN comunes:
+	Topología punto a punto; solo se cuentan los dispositivos finales, no el como se transmite (nube)
+	Topología gipred spot (se parece a estrella)
+	Topología de malla completa; cada uno de los nodos/routers se puede conectar con todos (necesita muchos recursos, se vuelve más cara)
+
+Topologías físicas:
+	Topología estrella (un switch o hub al centro)
+	Topología en estrella extendida (switchs o hubs a los centros y se conectan entre ellos)
+	Topología de bus (un bus donde se conectan todos)
+	Topología de anillo
+
+PDU's:
+5-7.datos?
+4.segmentos
+3.paquetes
+2.tramas
+1.bytes
+	SE convierte en trama cuando se le agregan los encabezados propios del enlace de datos y un tráiler "Encabezado - Paquete (Datos) - Tráiler"
+	Encabezado: "Inicio de trama / Direccionamiento / Tipo / Control"
+		Direccionamiento: MAC (Físico)
+		Tipo/longitud: Tipo de protocolo que trabaja (IPv4, IPv6)
+		Control: Sirve para manejar cierta información necesaria para esta trama, también se refiere al control de flujo (dúplex, semi, full)
+	Tráiler: "Detección de errores / Detención de la trama"
+		Detección de errores: "Hay un algoritmo CRC que se encarga de hacer un cálculo matemático, se hace o se realiza cuando vamos a liberar una trama al medio"; lo vuelve a calcular cuando recibe la trama el dispositivo final y si coincide está bien, sino coincide significa que la trama está dañada
+		Detención de la trama: Indica el final de la trama
+1.bits
+
+cable de codigos de colores: directo y cruzado
+es importante que este bien ponchado un cable
+
+Cable azul: Se utiliza para redes de almacenamiento
+
+Redes LAN, WAN, MAN, SAN (redes de almacenamiento), PAN
+
+Fibra optica: Multinodo (amarillos), conectores especiales
+
+Conexiones inalambricas: Wi-fi
+
+Centro de datos (Norma TIA-942)
+-iluminación, distribución y espacios adecuados
+-A diferencia de un site, tengo una granja de servidores y dispositivos de comunicación
+switch (toda la infraestructura), no solo de comunicación sino de servicios
+montados en cabinetes
+-sistema de enfriamiento adecuado
+-redundanca en cuanto a los servicios
+
+Conectores 
+	RJ-45
+	RJ-11: Para telefonía
+	RC2-32: Conector especial para configurar el switch
+
+IEEE
+-802.3: Ethernet
+-802.11: Lan inalámbrica (WLAN) y malla (certficación Wi-Fi)
+.A, .B, .C (Es diferente dependendo la frecuencia del Wi-Fi)
+-802.15: Bluetooth
+
+Tarea opcional: Ver la frecuencia de Wi-fi y ethernet en tu compu
+
+Cable de cobre (Componentes físicos)
+UTP, Coaxial, Conectores, NIC, Puertos, Interfaces
+
+"Interfaz-FastEthernet-1"
+"Interfaz-Gigabyte-2"
+"Interfaz-Gigabyte-3"
+
+Tecnicos de codificación comunes
+-Manchester (Subidas y bajadas)
+-No Return Zero (0's, y 1's)
+
+Mal ponchado:
+-Degradación de señal
+-Interferencia
+-Ruido
+
+Norma, cable trenzado T568
+
+Medios de transmisión de datos
+Medios fisicos
+	Guiados / Alámbricos
+		Par trenzado
+		Coaxial
+		Fibra óptica
+	No Guiados / Inalámbricos
+		Radio
+		Microondas
+		Satélite
+		Infrarojo
+
+Setidos de transmisión (Capa: Enlace de datos)
+	Símplex (Simple) A->B
+	Half-duplex (Semi-dúplex) A->B (enviando), A<-B (recibiendo)
+	Full-duplex (Dúplex) A<->B (transmitiendo y recibiendo al mismo tiempo, continua)
+	
+	Señal digital pura
+	Señal de interferencia
+	Señal digital con interferencia
+	
+Ruido en cobre:
+	Ruido eléctrico
+	Interferencia eléctrica (campo eléctrico del cableado)
+	Luz florescente (Lámparas florescentes)
+		Podía generar interferencia con cables (categoría 3)
+	Ruido de un motor (podadora, carro, maquina, aire acondicionado)
+		¿Cambios drásticos
+		
+Medios de cobre
+	Par trenzado
+			Hileras de cable de colores trenzados
+			El par trenzado protege la señal contra interferencias
+			Revestecimiento enterior: Protege contra el daño físico
+			Ponchado utp: el plástico que llega al cable le da mayor estabilidad y protección
+		UTP (Cable de par trenzado no blindado)
+		STP (Cable de par trenzado blindado)
+			Tiene un papel metálico en el interior, un 
+			plástico en el centro (divide los cables de cobre) y 
+			un hilo blanco, 
+			siendo más protegido
+	Cable coaxial
+			Revestecimiento exterior
+			Brindado de cobre trenzado
+			Aislamiento plástico
+			Conductor de cobre (Medio de cobre más grueso)
+
+Seguridad de los medios de cobre
+	Los cables deben estar conectados correctamente
+	Son maleables pero tampoco tanto
+	Las buenas normas cada extremo de cable debe tener su etiqueta (que describa, según las políticas de la empresa, ubicación, número de puerto y servicio (puedes usar tu nomenclatura))
+	Se deben inspeccionar las instalaciones para detectar daños
+	El equipo debe estar correctamente conectado a tierra
+	Revisar las normas
+	
+Categoría UTP
+	1: Telefonía
+	2
+	3
+	4
+	5 o 5e: Son comunes, para la casa
+		Utilizado para la transmición de datos
+		5: 100 Mbps (FastEthernet)
+		5e 1000 Mbps (Gigabit Ethernet)
+	6: No son comunes, se utilizan en los centros de datos
+		La tarjeta a la que se conecte debe soportar velocidades de Giga
+	7
+	8
+No deben rebastar los 100 metros, porque va a haber deficiencia
+	con el tiempo, a cambio es mejor usar un repetidor para un
+	tendido correcto
+	
+Cables de UTP
+	Normas
+		T568A
+			Pares
+				1. Verde Blanco
+				2. Verde
+				3. Naranja blanco
+				4. Azul
+				5. Azul blanco
+				6. Naranja
+				7. Cafe blanco
+				8. Cafe
+		T568B
+			Pares
+				1. Naranja blanco
+				2. Naranja
+				3. Verde blanco
+				4. Azul
+				5. Azul blanco
+				6. Verde
+				7. Cafe blanco
+				8. Cafe
+	Funciones de los colores (Los cables que no tienen nada, son de respaldo)
+		T568A
+			1. Blanco / Verde: 10/100BAST-T (10-100 megas): TX+
+			2. Verde: 10/100BAST-T (10-100 megas): TX-
+			3. Blanco / Naranja: 10/100BAST-T (10-100 megas): RX+
+			4. Azul
+			5. Blanco /Azul
+			6. Naranja: 10/100BAST-T (10-100 megas): TX-
+			7. Blanco / Cafe
+			8. Cafe
+		T568B
+			1. Blanco / Naranja: 10/100BAST-T (10-100 megas): TX+
+			2. Naranja: 10/100BAST-T (10-100 megas): TX-
+			3. Blanco / Verde: 10/100BAST-T (10-100 megas): RX+
+			4. Azul: (Telefonía: Ring)
+			5. Blanco / Azul: 
+			6. Verde: 10/100BAST-T (10-100 megas): RX-
+			7. Cafe blanco
+			8. Cafe
+	Cable directo de Ethernet: Ambos extremos son T568A o T568B
+		Conecta un host de red a un dispositivo de red, como un switch o un hub
+	Cruzado Ethernet: Un extremo es T568A y el otro extremo T568B
+		Conecta dos host de red
+		Conecta dos dispositivos de red intermediarios (un switch a un switch, o un router a un router)
+	De Consola: Propietario de Cisco
+		Conecta el puerto serie de una estación de trabajo al puerto de consola de un router (ethernet) mediante un adaptador
+		(Cada empresa tiene sus políticas (código propio), el ethernet tiene un código de colores para ellos no necesiamente estandarizado)
+		Sirve para que pueda conectase al switch o router y poderlo administrar
+			Nombre
+			Dirección IP
+		
+PoE (Power over Ethernet):
+Tiene la capacidad de energizar un dispositivo que no requiera mucha energía 
+	En un Switch (Capa 2), Switch multicapa y Breach, se conecta el cable ethernet y se energiza a través de este
+	Ejemplo de dispositivos que se pueden cargar por PoE:
+		Telefono sobre IP
+		Camaras PoE
+		Access-Point
+		
+fluke networks: Sirven para checar los cables ethernets 
+	"Termometro": Hace pitido
+	"Dispositivo": manda una señal de 5volts
+
+OTDR: Sirven para checar cables de fibra óptica
+
+Tipos de medios de fibra óptica
+	Monomodo (Amarillo)
+		(backbones)
+	Multimodo
+		Azul: Redes de almacenamiento
+		Naranja: Multinodo, interiores y redes lan
+		Soporta ciertas distancias
+		
+Conectores de fibra ótipca
+	Conectores ST
+	Conectores SC
+	Conector LC
+	conectores LC multinodo dúplex
+
+REDES MPLS
+	"Multiprotocol Label Switching"
+	Organismo de Estandarizacion: UTU-T	
+	
+HDLC: Trabaja en WAN
+
+¿Cómo hacer un cable?
+Fijarse en una norma, el código de colores y el segurito para conexión
+Después poncharlo bien y jalar para asegurar que no se safe
+
+-Revisar siempre que el dispositivo cumpla con los estándares
+¿Bien enroscados los conectores?
+
+Arquitectura TCP/IP (Capas Modelo OSI)
+-Aplicación (5-7)
+-Transporte (4)
+-Internet (3)
+-Acceso a la red (1-2)
+
+Router unico dispositivo que contiene el dominio del broadcast
+Arp: puerta de seguridad e inseguridad
+	Tiene su propio tramado
+	Usa tecnologías de red como Ethernet y Token Ring para resolver direcciones físicas
+	-2 minutos se elimina si ya no usas la entrada
+	-sino le da otros 10 minutos
+	
+	gateway del router en switch?
+	
+Comandos
+	arp -a
+		almacena las entradas
+	arp
+	arp -d
+		limpia las entradas
+		
+IP (Internet Protocol): 
+Es un protocolo no confiable y del mejor esfuerzo
+(manda datagramas sin ninguna secuencia o confirmación de que 
+llego al destino, no orientado a conexión, es decir, no tiene
+que establecer sesión primero, solo agarra y manda) 
+	IPv4		
+	IPv6
+
+Servicios IP
+	Capa de red o internet
+	Protocolo que atiende a varios clientes (clientes múltiples)
+		Lleva protocolos como: (Protocolo, campo 1 byte en el datagrama)
+			ICMP (1)
+			IGMP (2)
+			UDP (3)
+			TCP (4)
+	Trabaja con datagramas
+	Es independiente del medio y tecnología
+		No importa si es Ethernet (Fast o Giga o Serial),
+		Token Ring, FDDI
+	Framenta y reemsambla paquetes
+	Extensible
+	
+Medio - MTU (Unidad de transmisión máxima)
+Ethernet II: 1500 bytes
+Token Ring: varía (4500 bytes)
+
+Datagrama de IP
+Enc. NIP - Enc. IP - Datos IP - Cola
+		 |	 (Datagrama IP)   |
+	Enc. IP: 20 bytes
+	Datos IP: 65,516 bytes (varía)
+	
+Direccionamiento IPv4
+Identificador en una red
+
+Puerta de enlace predeterminada es la ip de nuestro router de manera estática
+
+La DNS de manera estática necesitamos información, en dinámica no tenemos que hacer nada
+
+Las direcciones IP tienen una longitud de 32 bits o 4 octetos
+Formalmente tiene dos campos
+	Un campo que asigna e identifica la red (netid)
+	El otro campo, es el campo de Host (hostid)
+	
+Clases
+La 127 es una dirección IP privada que la usan los dispositivos
+127.0.0.1 - localhost
+Asignado para que sea usado de manera local
+	Clase A
+		Network.host.host.host
+		Primer Octeto: 1-126 (127)
+		Mascara por omisión: 255.0.0.0
+		Uso: Redes grandes
+	Clase B
+		Network.network.hos.host
+		Primer Octeto: 128 - 191
+		Mascara por omisión: 255.255.0.0
+		Uso: Redes medianas
+	Clase C
+		network.network.network.host
+		Primer Octeto: 192-223
+		Mascara por omisión: 255.255.255.0
+		Uso: Redes pequeñas
+	Clase D: para multidifusión / multicast
+		Primer Octeto: 224-239
+		Utilizada en grupos multicast en una red local
+	Clase E: para investigación / experimentales
+		Primer Octeto: 240-255
+		No se pueden utilizar para asignarlas a los host
+		
+Dependencias/Organizaciones
+	Lanic, IANA
+	
+IP publicas
+
+C
+	192.0.0.0 to 192.167.255.255
+	192.169.0.0 to 223.255.255.255
+	
+IP privadas
+	A:10.0.0.0 to 10.255.255.255
+	B:172.16.0.0 to 172.31.255.255
+	C:192.168.0.0 to 192.168.255.255
+	
+Restricciones
+El ip octeto no puede tener los valores 0 ni 255
+Un equipo no tiene autorización de hacer un broadcast al 255.255.255.255
+Las ip's privadas no pueden utilizarse en internet, solo las ip's públicas
+
+Subneteo (2^n - 2 (uno por el identificador o el host, primero, el segundo por el broadcast))
+Nos dan una dirección IP, segmento de red y "n" número de host
+Admin un proceso que usa el router para definir a que segmento
+de red pertenece una dirección IP específica
+	(Crear subredes por cada perfil, segmentos de red)
+¿Por qué subnetera?
+	Tener agrupado de acuerdo al perfil del usuario
+	Por ubicación física
+
+Prestamos de bits para crear subredes en los segmentos de host
+División en subredes: proceso de segmentación de una red en varios
+espacios de red más pequeños o subredes.
+
+Política de seguridad (ESCOM)
+	Que se bloquea el uso de netflix o spotify en la red del IPN
+	Tarificador de ancho de banda, sin asignar tanta velocidad de 
+		conexión a ese servicio conocido como "Calidad de servicio"
+	Puedes configurar que equipo se puede comunicar con otro equipo
+		o si no se puede
+		
+Notación cidr: /25 - Número de redes y subredes
+
+
+Máscaras de subred de longitud variable (VLSM)
+Permite dividir un espacio en redes a partes más pequeñas
+-Ocupa el broadcast o el id (ip)
+-Aprovecha lo más que se pueda las subredes que esten siendo desperdiciadas
+-Subdivisión de subredes (agarrando bits de más)
+
+PROCESO DE ENRUTAMIENTO
+Usa una ruta para asignar una dirección de red destino hacia el próximo salto y luego envía el paquete a esa dirección de salto
+Número de routes o saltos fuera del gateway
+
+TABLA DE ENRUTAMIENTO, se almacena en memoria RAM
+	Tabla que tiene el router
+		Tiene almacenada las redes redes destinos
+			Para llegar a esta red, tiene que ir a tal salto
+	command: show ip route
+	C-Directamente conectado
+	D-Dinamyc
+	S-Static
+	R-RIP
+
+ESTRUCTURA DE ENRUTAMIENTO
+	Identificador de red
+	Dirección de reenvío: Es la dirección a la que se reenvía el paquete. Una dirección de interconexión de redes.
+	Interfaz: Se trata de un número de puerto u otro tipo de identificador lógico
+	Métrica: Medida de la preferencia de una ruta. Normalmente, la métrica más baja es la ruta preferida. Si hay varias rutas a una red de destino dada, se utiliza la ruta con la métrica menor.
+
+TIPOS DE ENRUTAMIENTO (Construir la tabla de enrutamiento)
+	ESTÁTICO
+		1. Administrador lo hace de manera manual
+			El administrador debe estar atento al funcionamiento de la red
+		"S"
+		Ip route #.#.#.# 255.255.255.0 #.#.#.#
+				   destino/mascara/siguiente salto
+	DINÁMICO
+		por software
+		
+ENRUTAMIENTO POR DEFAULT
+	si no conoce la red lo envía vía la ruta por default
+	ip route 0.0.0.0 0.0.0.0 | interfaz |
+	(El comando se ingresa tantas veces como seriales (no ethernets) que tenga el router)
+	
+Ruteo Estático: Uso de rutas que el administrador de la red configuró o definió manualmente en cada equipo ruteador
+	Se requiere la configuración de rutas unidireccionales en ambos sentidos
+	Configuración de tantas rutas como redes se requieran alcanzar
+Ruteo Dinámico: Uso de rutas que un protocolo de enrutamiento determina automáticamente de acuerdo a cambios de la topología de la red o tráfico
+	El ruteo dinámico está basado en protocolos de ruteo para distribuir información de ruteo (tablas de ruteo)
+	Un protocolo de ruteo define reglas que son usadas por un router cuando se comunica con routers vecinos
+	Las tablas de ruteo son actualizadas automáticamente basadas en el intercambio de información de ruteo con otros routers
+	Se compone de dos elementos:
+		Protocolo de ruteo: Comparte información y enruta tráfico usando la información de ruteo
+		Algoritmo de ruteo: Determina la mejor trayectoria hacia la red destino
+	
+	
+PROTOCOLOS DE ENRUTAMIENTO
+Los protocolos de ruteo son usados en los routers para determinar y mantener tablas de ruteo
+Una vez que la mejor ruta es determinada, el router puede enrutar un protocolo ruteable
+	Protocolo Rutable (Enrutable)
+		IP
+		IPX
+	Protocolo de Ruteo (de Enrutamiento)
+		RIP, RIPv2, RIPng
+		OSPF, OSPFv3
+		EIGRP
+		IS-IS
+		BGP
+		
+CLASIFICACIÓN DE PROTOCOLOS DE ENRUTAMIENTO
+	Rol:
+		IGPs: Protocolos de Enrutamiento Interior (Interior Gateway Protocols)
+			Intercambir información dentro de un sistema autónomo; un grupo de dispositivos (Routers) 
+			interconectados entre sí y además están siendo administrados por una misma organización.
+			El sistema aútonomo tiene un identificador (número)
+			Divididos en:
+				Vector distancia
+				Estado de enlace 
+			RIP
+			IGRP 
+			OSPF (Lo usa el IPN)
+			EIGRP
+			IS-IS (Lo usa Disney)
+		EGPs: Protocolos de Enrutamiento Exterior (Exterior Gateway Protocols)
+			Se usan para intercambir información de enrutamiento entre sistemas autónomos
+			
+			BGP: Va a hacer de traductor o interprete que permite que dos sistemas autonomos de diferente protocolo (idioma) puedan comunicarse
+				Se configura en los routers que se conectan con otros sistemas autónomos diferentes
+		
+	Método en que descubren y calculan rutas: (Protocolos de Enrutamiento Dinámico)
+		Protocolos Vector-Distancia:
+			Anuncia el número de saltos (routers) al destino
+			Indica la dirección por el cual el tráfico puede alcanzar la red destino
+			Ejemplos:
+				RIPv1
+				RIPv2
+				IGRP
+			Caracterísitcas:
+				No maneja topología, se enfoca en lo que recibe de sus vecinos, solos e comunica con sus vecinos
+				Construye la tabla de enrutamiento según lo que reciba de su vecino
+				Convergencia lenta; Intercambio de información entre todos los routers
+				Actualizaciones frecuentes y periódicas, aún sin cambios
+				Requiere poco procesamiento de la información recibida
+		Protocolos de estado de enlace (Link State)
+			Está basadao en el estado del enlace
+			Crea una abstracción de la topología de la red
+			Está basado en el algoritmo Shortest Path First (SPF); Primero la Ruta más Corta
+			Ejemplos:
+				OSPF
+				IS-IS
+			Características:
+				Crea una topología exacta de la red
+				Envía actualizaciones del enrutamiento por estado de enlace a otros routers, cuando hay cambios o eventos
+				Las rutas son seleccionadas del árbol de la topología construída
+				Actualizaciones activadas por cambios
+				Convergencia rápida
+				Requiere mayor capacidad de CPU y memoria del sistema
+		Protocolos híbridos balanceados: Sacar lo bueno de protocolos de vector-distancia y de estado de enlace
+		
+	Soporte de direccionamiento IP: (Protocolos de Enrutamiento Dinámico)
+		Protocolos Classful
+			No incluye la máscara de la subred cuando anuncia una ruta
+			Toma la máscara por default para calcular la red
+			Intercambia rutas sumarizadas (entre redes externas)
+			Ejemplos:
+				RIPv1
+				IGRP
+		Protocolos Classless
+			Incluye la máscara de la subred cuando anuncia una ruta
+			Ejemplos:
+				OSPF
+		
+		Distancia administrativa y valores
+			Leer RIP que es, cual es su metrica, versiones
+			Distancia administrativa (DA): Se va a fijar el router sobre el valor más bajo, son valores predeterminados (no modificables por administrador), antes se usa la métrica (costo del ancho de banda)
+			RIPv2
+
+RIP (Routing Information Protocol)
+Es un protocolo de enrutamiento vector-distancia, se basa en un estándar descito en el RFC 1058
+RIP, divide las maquinas participantes en activas o pasivas. Solo los routers pueden ejecutar RIP en modo
+activo, y los equipos en modo pasivo. 
+	Los routers activos notifican sus rutas a los otros routers 
+	Los equipos pasivos listan y actualizan sus rutas basandose en estas notificaciones
+
+Cada enrutador transmite su tabla de enrutamiento completa a sus vecinos (Conectados directamente) más cercanos cada 30 segundos
+Conocido como convergencia a este conocimiento compartido
+
+Cuando un router crea una ruta en su tabla, inicia un temporizador para tal ruta. Este tiempo debe 
+iniciarse cada vez que el router recibe otro mensaje RIP anunciando la ruta, la ruta queda invalida si
+pasan más de 180 segundos
+
+Utiliza como métrica para la selección de rutas el número de saltos.
+RIP define un número de saltos mayor a 15 como inalcanzable.
+
+Los routers conservan solo la mejor ruta hacia un destino, pero pueden preservan más de una si
+el costo de todas es igual, hasta que aparezca una menor
+
+Balanceo de carga: 4 rutas
+
+Cuando un router recibe una actualización de un vecino,
+	si ha habido algún cambio actualiza su tabla de enrutamiento:
+	Si se recibe una nueva ruta de otro router vecino, se incrementa en uno el número de saltos antes de agregarla a la tabla. 
+	Se utiliza la dirección IP origen del paquete en el que venía el mensaje de actualización como la próxima dirección de salto.
+	Si se recibe una ruta ya existente desde u origen diferente, sólo se modifica la tabla si la métrica de la actualización es menor, en cuyo caso se sustituye por la antigua. Si la métrica es igual, se añade sin eliminar la ruta antigüa para permitir el balanceo de carga.
+	Si la ruta ya se encuentra en la tabla y la entrada viene del mismo origen, se reemplaza la entrada existente aunque la métrica no sea mejor.
+Una vez actualizada la tabla de enrutamiento, el router transmite la actualización a sus vecinos
+
+Algoritmo Velkman Homk
+
+RIPv1: No soporta VLSM, ni CIDR; con clase
+Si no existe continuidad en las subredes, el enrutamiento no es correcto
+	No envía la máscara de subred asociada a cada destino en las actualizaciones de rutas
+	Para calcular la red destino que se enviará en la notificación, adopta uno de los criterios:
+		
+		Si la interfaz forma parte de la red principal involucrada en la notificación (Clase A,B,C)
+		se publica el prefijo de red resultante de aplicar la máscara de subred de esa interfaz a la dirección de red
+		
+		Si la interfaz esta configurada con una dirección de red principal diferente a la publicada,
+		en la actualización se usa como red destino la red principal con clase (ruta sumarizada)
+		
+		Si la red a publicar tiene un prefijo menor que el de la máscara de la clase de red principal,
+		en la actualización se envía el prefijo de la red principal con clase
+		255.255.255.255
+		
+RIPv2; sin clase
+Envía más información útil en los mensajes de actualización de RIP, es decir, la máscara de subred a
+aplicar a cada ruta. y puertas de enlace 
+Así, incorpora las máscarada de subred en la tabla de enrutamiento, soportando VLSM y CIDR
+
+Puede utilizar la sumarización automática en lso bordes de una red principal, pero esta configuración
+(predefinida), se puede desactivar para ser compatible con VLSM
+
+Si hay varias coincidencias con distintas rutas asociadas a la misma red principal, el router aplicará
+la ruta que tenga el mayor número de bits coincidentes con la dirección destino
+
+Utiliza como destino para los mensajes de actualización la dirección IP de multicast 224.0.0.9 en un esfuerzo de reducir el tráfico de red
+Incorpora también una autenticación para seguridad
+Los mensajes de multidifusión ocupan menos ancho de banda que los de difusión
+Los dispositivos que no están configurados para RIPv2 descartan los mensajes de multidifusión en el nivel de enlace de datos.
+
+RIPng
+Es una extensión de RIPv2 que se creó para admitir a IPv6
+	https://sites.google.com/site/redeslocalesyglobales/4-configuracion-de-red/2-configuracion-de-routers/6-configuracion-del-encaminamiento/2-encaminamiento-dinamico/4-protocolo-rip
+
+RIPv1 y RIPv2 se encapsulan en UDP el puerto utilizado es el 520
+	
+Métricas
+	RIP-Saltos
+	EIGRP - Ancho de banda, Retardo, Confiabilidad (Índice de error), Carga (Cantidad de actividad en un recurso) y MTU (Unidad de transmisión máxima)
+	OSFP - Ancho de banda (Bandwidth)
+	IS-IS - Costo (Valor arbitrario asignado por un administrador de red. Se basa por lo general en el ancho de banda, la preferencia del administrador u otra medida)
+	BGP - Cantidad de SA ó políticas
+	
+Configurar RIPv1
+	router rip
+	network <dirección de red>
+	
+Configurar RIPv2
+	router rip
+	version 2
+	network <dirección de red>
+	
+	show ip protocols
+	
+Interfaz Pasiva
+	No es necesario que una interfaz de fastethernet reciba las actualizaciones (Servidor)
+	Evitando el tráfico innecesario
+	Comandos:
+		config: passive-interface fastethernet 0/0
+		debug ip rip      - permite ver actualizaciones según se genere (Activas y desactivas)
+		brief
+		config terminal:
+			router rip
+				default-information originate       - ruta por defecto
+				
+OSPF
+	Puede usar autenticación con el algoritmo md5 de criptografía la métrica es el costo
+	OSPF es converge más rápido que RIP
+	Utiliza multicast para enviar actualizaciones del estado de link
+	Las actualizaciones se hacen con un cambio
+	Es para redes más grandes
+	Conoce el estado de sus vecinos (routers) así como la topología que se tiene
+	maneja 5 tipos de mensajes paquetes.
+		1: Saludo (Hello) 
+			Diapositivo 55
+		2: Descripción de base de datos (DBD)
+		3: Solicitud de estado de enlace (LSR)
+		4: Actualización de estado de enlace (cada 30 minutos) (LSU)
+		5: Acuse de recibo de estado de enlace (LSAck)
+
+	Se crean sobre la base de los algoritmos SPF (Primero la ruta más corta, Shortest path first) de Dijstra
+
+Aspectos básico del protocolo OSPF
+	Definido por la IETF en la RFC2328
+		Se encapsula en IP con protocolo=59h
+		Lecuta obligada
+		TIene 5 tipos de mensaje
+		
+Características:
+	Velocidad de convergencia
+	Soporte de VLSM
+	Grandes redes IP: Áreas
+	Mejor uso del ancho de banda
+	Se define "costos"
+	
+Se hace uso del protocolo Hello para conocer los routers vecinos, se envía periódicamente a la dirección multicast IP 224.0.0.5
+
+OSPF trabaja con áreas, "divide y venceras"	
+Área 0 o Área Backbone
+	En ella se conocen las demás áreas, donde se conectan las redes LAN
+
+Comandos:
+	enable
+		configure terminal
+			router ospf /process-ID/      - process-ID: identificar el proceso (1 - 65535)
+			router ospf 1
+				network /dirección_de_red/   /wilcard - formato de máscara de red personalizada/   area   /area_ID/
+				network 10.2.3.4 0.0.0.3 area 1
+				network 20.1.71.8 0.0.0.3 area 2
+				
+			wildcard:
+				 255.255.255.255
+				-255.255.255.252
+				=0.0.0.3 (Máscara inversa)
+				
+	router-id: Identificador del router, le permite ser visible ante sus vecinos
+	1. IP más alta de sus interfaces loopback (si no hay, físicas)
+		interfaz loopback: interfaz lógica del router que permite que en dado caso que algún
+			modulo no funcione, sea un medio de acceder al router de manera remota
+	2. Administrador usa el router-id para configurar
+
+INTERFAZ LOOPBACK
+(localhost - interfaz lógica) 127.0.0.1 dirección IP que no se caera
+	enable
+		configure terminal
+			int loopback ?               -                (interface loopback #)
+			int loopback 0
+	solito se levanta y se pueden poner hasta dos loopback
+			ip address #.#.#.# #.#.#.#          -       ip address /direccion-ip/ /máscara: 255.255.255.255/
+			end
+		write
+		clear ip ospf process        -   para volver a generar el router-id, no se recomienda en producción (se cae toda la red)
+		reload
+		
+		sh ip ospf interface
+		sh ip ospf neighbor
+		sh cdp neighbors              -     permite ver a los dispositivos vecinos
+		sh ip protocols
+	Comandos: (Para cambiar el costo)
+		ip ospf cost
+		bandwidth
+		
+Métrica de OSPF
+	Costo
+		Está basado en el ancho de banda
+			El costo se calcula con la fórmula 10^8/ancho de banda
+		El ancho de banda hace referencia
+			Es de 100 Mbps, por defecto
+			Se puede moficiar usando el comando "auto-cost reference-bandwidth"
+			
+OSPF define cinco tipos de redes:
+	Punto a Punto
+		No existen DR/BDR
+	Accesos múltiples con broadcast
+		n(n-1)/2
+		Adyacencias múltiples
+		Flooding de LSA masivo (Intercambio masivo de mensajes)
+			Por cada LSA que se envía, debe haber un acuse de recibo enviado de vuelta al router que realizó la tranmisión
+			Se debe configurar un router designado (DR) y un router de respaldo (BDR)
+				DR prioridad de interfaz más alta
+				BDR segunda prioridad de interfaz más alta
+				(Si las prioridades de interfaz son iguales, se utiliza la ID del router más alta para romper dicha igualdad)
+	Accesos múltiples sin broadcast (NBMA - No Broadcast Multiacces)
+		Parcialmente malladas
+	Punto a multipunto
+	Enlaces Virtuales
+	
+Manipulación del proceso de selección al inciar (en producción debe haber supervisión, anticipado)
+	Si desea tener influencia sobre la selección de DR y BDR, realice uno de los procesos sigs:
+		Primero inicie el DR, después el BDR y luego inicie todos los otros routers
+		Apague la interfaz en todos los routers, utilice el comando no shutdown en el DR, luego, en el BDR y, por último en los demás routers
+	Usar el comando:
+		ip ospf priority interface
+			ip ospf priority {0-255}
+			
+		default-information originate
+			(propagar rutas)
+		
+		ip ospf hello-interval segundos                   -       (5)
+		ip ospf dead-interval segundos                   -      (20)
+			(Los intervalos de saludo y los intervavlos muertos deben ser los mismos entre vecinos - Detecta más rápido las fallas en la red)
+			
+			sh ip int brief
+			sh ip ospf 
+			sh ip protocols
+			
+PRIORIDAD de Routers
+prioridad 0: el router no participa ni de backoup ni designado
+
+Desactivar busqueda DNS
+	config t
+		no ip domain-lookup
+		
+		enable password /Password/
+		
+Mensaje del dia
+		banner motd # Escriba aquí el mensaje del día #
+		
+		line console 0
+			password /Password/
+			login
+		line vty 0 4
+			password /Password/
+			login
+			
+		sh ip ospf neighbor
+		sh ip ospf interface
+		
+CAPA DE TRANSPORTE
+	Es la capa 4
+	Es responsable de establecer una sesión de comunicación temporal entre dos aplicaciones y de transmitir datos entre ellas. TCP/IP utiliza dos protocolos para lograrlo:
+			Protocolo de control de transmisión (TCP)                           /transporte: IP
+				Proporciona una entrega confiable
+				Utiliza el acuse de recibo y otros procesos para asegurar la entrega
+				Mayor sobrecarga de red
+				Es orientado a conexión (crea una sesión entre el origen y destino)
+					Retransmite datos perdidos o dañados
+				Reconstrucción de datos ordenada: numeración y secuenciación de segmentos
+				Controls del flujo: regula la cantidad de datos que se  transmiten
+				Protocolo de estado: realiza un seguimiento de la sesión
+							HTTP
+							FTP
+							SMTP
+							TelNet
+			Protocolo de datagramas de usuario (UDP)
+				Proporciona solo las funciones básicas para la entrega; no proporciona confiabilidad
+				No orientado a conexión: Envía los datos sin estar seguro si el destino los recibira
+				No hay reconstrucción de datos ordenada
+				Protocolo sin estado
+				Sin control de flujo
+				RFC 768
+							DHCP
+							DNS
+							SNMP
+							TFTP (también trabaja en la capa de aplicación y sirve para configurar switches o routers)
+							VoIP (Voz sobre IP)
+							IPTV
+		Estos protocolos se encargan de la división de los datos en segmentos para su administración y reunificación de los datos segmentados en streams de adtos de aplicación en el destino
+		
+SEGMENTACIÓN DE LOS DATOS
+	Permite que se entrelacen (multiplexen) varias comunicaciones diferentes de varios usuarios distintos en la misma red en forma simultánea
+	
+PUERTOS
+	0-1023	Puertos bien conocidos
+	1024-49151 Puertos registrados
+	49152-65535 Puertos privados y/o dinámicos 
+	
+Comandos CMD/Powershell
+	netstat
+		Se utiliza para inspeccionar las conexiones TCP que están abiertas y en ejecución en el host de red
+		
+PROTOCOLO TCP de enlace de tres vías
+	Paso 1
+		El cliente de origen solicita una sesión de comunicación de cliente a servidor con el servidor
+	Paso 2
+		El servidor reconoce la sesió´n de comunicación de cliente
+	Paso 3
+		El cliente de origen reconoce el acuse de recibo
+		
+	Entrega ordenada
+		Se utilizan números de secuencia para volver a armar los segmentos en el orden original
+		
+	Tamaño de ventana: cantidad de datos que puede transmitir un origen antes de recibir un acuse de recibo

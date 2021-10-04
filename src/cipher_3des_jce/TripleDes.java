@@ -22,20 +22,60 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class TripleDes {
     /**
+     * This function generate a key file for 3DES and save it into a .key file
+     * @return the name of the key file
+     */
+    static String generate_file_key() throws IOException, NoSuchAlgorithmException
+    {
+        return generate_file_key("key");
+    }
+    /**
+     * This function generate a key file for 3DES and save it into a .key file
+     * @param name the name of the key file
+     * @return the name of the key file
+     */
+    static String generate_file_key(String name) throws IOException, NoSuchAlgorithmException
+    {
+        // Create an instance about which cipher we will use for generate a key, in this case 3DES
+        KeyGenerator key_generator = KeyGenerator.getInstance("DESede");
+        // Generate a secret key for the cipher and descipher, in this case 3DES
+        SecretKey key = key_generator.generateKey();
+
+        String name_file = name + ".key";
+        File file_key = new File(name_file);
+        FileOutputStream fos = new FileOutputStream(file_key);
+        // Save the key used cipher content with base64 encoder in a file
+        fos.write(Base64.getEncoder().encode(key.getEncoded()));
+        fos.close();
+        return name_file;
+    }
+    /**
+     * This function read a key file
+     * @param file_name_key the name or path of the key file
+     * @return SecretKey read
+     */
+    static SecretKey read_file_key(String file_name_key) throws IOException
+    {
+        // Read the key, in the file key
+        File file_key = new File(file_name_key);
+        byte[] bytes_key = Files.readAllBytes(file_key.toPath());
+        // Decode bytes in base64 encoded
+        byte[] decoded = Base64.getDecoder().decode(bytes_key);
+        // Initialize secret key
+        SecretKey key = new SecretKeySpec(decoded, "DESede");
+        return key;
+    }
+    /**
+     * This function encipher a file using 3DES
      * @param name the name of a file to encipher its content
      * @param variant it can be a variant of 3des like: 
      *          ECB, CBC, CBF, OFB
      */
-    static SecretKey encipher_file(String name, String variant)
+    static void encipher_file(String name, String variant, String file_name_key)
     {
         try
         {
-            // Create an instance about which cipher we will use for generate a key, in this case 3DES
-            KeyGenerator key_generator = KeyGenerator.getInstance("DESede");
-            // Generate a secret key for the cipher and descipher, in this case 3DES
-            SecretKey key = key_generator.generateKey();
-            byte[] bytes = key.getEncoded();
-            key = new SecretKeySpec(bytes, "DESede");
+            SecretKey key = read_file_key(file_name_key);
             
             // Create an instance cipher of 3DES and its variant
             Cipher cipher = Cipher.getInstance("DESede/" + variant + "/PKCS5Padding");
@@ -49,74 +89,42 @@ public class TripleDes {
                         new IvParameterSpec(new byte[8]));
             }
             
-            try
-            {
-                File file_in = new File(name);
-                File file_out, file_key;
-                
-                String[] parts_name = name.split("\\.");
-                String extention;
-                
-                byte[] bytes_content;
-                byte[] bytes_encipher;
-                
-                // Encipher the content of a file
-                bytes_content = Files.readAllBytes(file_in.toPath());
-                bytes_encipher = cipher.doFinal(bytes_content);
-                // Obtain the name of the file without its extention
-                extention = "." + parts_name[parts_name.length - 1];
-                // Change the extention of our output file (.des)
-                file_out = new File(name.replace(extention, ".des"));
-                try (FileOutputStream fos = new FileOutputStream(file_out))
-                {
-                    // Save the encipher content with base64 encoder in a file
-                    fos.write(Base64.getEncoder().encode(bytes_encipher));
-                    fos.close();
-                }catch(IOException e)
-                {
-                    e.printStackTrace();
-                }
-                
-                file_key = new File("key_" + name.replace(extention, ".key"));
-                try (FileOutputStream fos = new FileOutputStream(file_key))
-                {
-                    // Save the key used cipher content with base64 encoder in a file
-                    fos.write(Base64.getEncoder().encode(key.getEncoded()));
-                    fos.close();
-                }catch(IOException e)
-                {
-                    e.printStackTrace();
-                }
-                return key;
-            }catch(IOException e)
-            {
-                e.printStackTrace();
-            }
+            File file_in = new File(name);
+            File file_out;
+
+            String[] parts_name = name.split("\\.");
+            String extention;
+            // Encipher the content of a file
+            byte[] bytes_content = Files.readAllBytes(file_in.toPath());
+            byte[] bytes_encipher = cipher.doFinal(bytes_content);
             
+            // Obtain the name of the file without its extention
+            extention = "." + parts_name[parts_name.length - 1];
+            // Change the extention of our output file (.des)
+            file_out = new File(name.replace(extention, ".des"));
+            FileOutputStream fos = new FileOutputStream(file_out);
+            // Save the encipher content with base64 encoder in a file
+            fos.write(Base64.getEncoder().encode(bytes_encipher));
+            fos.close();
         }catch(NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | 
-                IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e)
+                IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException |
+                IOException e)
         {
             e.printStackTrace();
         }
-        return null;
     }
     /**
+     * This function decipher a file encipher by 3DES
      * @param file_name the name of a file to decipher its content
      * @param variant it can be a variant of 3des like:
      *          ECB, CBC, CBF, OFB
      * @param file_name_key the name of the key file
      */
-    static void decipher_file(String file_name, String variant, String file_name_key)
+    static void decipher_file(String file_name, String variant, String file_name_key, String ext)
     {
         try
         {
-            // Read the key, in the file key
-            File file_key = new File(file_name_key);
-            byte[] bytes_key = Files.readAllBytes(file_key.toPath());
-            // Decode bytes in base64 encoded
-            byte[] decoded = Base64.getDecoder().decode(bytes_key);
-            // Initialize secret key
-            SecretKey key = new SecretKeySpec(decoded, "DESede");
+            SecretKey key = read_file_key(file_name_key);
             try
             {
                 // Create an instance cipher of 3DES and its variant
@@ -142,7 +150,7 @@ public class TripleDes {
                 bytes_decipher = cipher.doFinal(Base64.getDecoder().decode(bytes_content));
                 
                 // Output file with data recovered
-                file_out = new File("recovered.txt");
+                file_out = new File("recovered" + ext);
                 try (FileOutputStream fos = new FileOutputStream(file_out))
                 {
                     // Save the content
